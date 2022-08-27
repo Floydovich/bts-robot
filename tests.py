@@ -1,27 +1,6 @@
 from unittest import TestCase
 
-import requests
-from bs4 import BeautifulSoup
-
-
-class Page:
-    def __init__(self, url):
-        response = requests.get(url)
-        self.status = response.status_code
-        self.url = response.url.rstrip('kk')
-        self.content = response.text
-
-
-class Robot:
-    current_page = None
-
-    def open_page(self, url):
-        self.current_page = Page(url)
-
-    def find_link(self, text):
-        soup = BeautifulSoup(self.current_page.content)
-        link = soup.find('a', text=text)
-        return link
+from robot import Robot
 
 
 class RobotBrowsePagesTest(TestCase):
