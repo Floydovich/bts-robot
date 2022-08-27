@@ -11,11 +11,21 @@ class Page:
         self.content = response.text
 
 
+class Link:
+    text = 'Заңды тұлғаларға'
+
+    def __str__(self):
+        return '<a'
+
+
 class Robot:
     current_page = None
 
     def open_page(self, url):
         self.current_page = Page(url)
+
+    def find_link(self, link_text):
+        return Link()
 
 
 class RobotBrowsePagesTest(TestCase):
@@ -36,3 +46,11 @@ class RobotBrowsePagesTest(TestCase):
         self.robot.open_page(self.url)
 
         self.assertIn(page_title, self.robot.current_page.content)
+
+    def test_can_find_link_on_page(self):
+        link_text = "Заңды тұлғаларға"
+
+        found_link = self.robot.find_link(link_text)
+
+        self.assertIn('<a', str(found_link))
+        self.assertEqual(link_text, found_link.text)
