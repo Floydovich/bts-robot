@@ -11,15 +11,22 @@ class Page:
 
 
 class Robot:
-    def start(self, url):
-        return Page(url)
+    current_page = None
+
+    def __init__(self, start_url):
+        self.start_url = start_url
+
+    def start(self):
+        self.current_page = Page(self.start_url)
 
 
 class RobotBrowsePagesTest(TestCase):
 
     def test_can_open_start_page(self):
         given_url = 'https://nursultan.kgd.gov.kz/'
-        robot = Robot()
-        current_page = robot.start(given_url)
-        self.assertEqual(current_page.status, 200)
-        self.assertEqual(current_page.url, given_url)
+
+        robot = Robot(start_url=given_url)
+        robot.start()
+
+        self.assertEqual(robot.current_page.status, 200)
+        self.assertEqual(robot.current_page.url, given_url)
