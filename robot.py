@@ -12,7 +12,8 @@ class Robot:
         self.open_page(self.base_url)
 
     def open_page(self, url):
-        self.current_page = Page(url)
+        response = requests.get(url)
+        self.current_page = Page(response)
 
     def find_link(self, text):
         soup = BeautifulSoup(self.current_page.content, 'html.parser')
