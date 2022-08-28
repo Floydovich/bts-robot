@@ -48,7 +48,7 @@ class RobotBrowsePagesTest(TestCase):
         self.assertIn(file_name, file_link['href'])
 
     def test_can_save_file_from_page(self):
-        file_name = 'list.xlsx'
+        file_name = '../list.xlsx'
         link_string = 'Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему'
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
 
