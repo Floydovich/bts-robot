@@ -1,56 +1,42 @@
 from unittest import TestCase
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date
+import sqlite3
 
 
-class DBManager:
+COLUMNS = [
+    'id',
+    'iin',
+    'company_name',
+    'company_address',
+    'court_name',
+    'initiation_date',
+    'appointment_date',
+    'pm_name',
+    'deadline_from',
+    'deadline_to',
+    'claims_address',
+    'contact_details',
+    'posting_date',
+]
 
-    def __init__(self):
-        self.engine = create_engine('sqlite:///../sqlite3.db')
-        self.engine.connect()
-        self.meta = MetaData()
-        self.table = None
 
-    def create_table(self, table_name):
-        self.table = Table(
-            table_name, self.meta,
-            Column('id', Integer, primary_key=True),
-            Column('iin', Integer),
-            Column('company_name', String),
-            Column('compnay_address', String),
-            Column('court_name', String),
-            Column('initiation_date', Date),
-            Column('appointment_date', Date),
-            Column('pm_name', String),
-            Column('deadline_from', Date),
-            Column('deadline_to', String),
-            Column('claims_address', String),
-            Column('contact_details', String),
-            Column('posting_date', Date),
+class Database:
+    def __init__(self, db_name):
+        self.con = sqlite3.connect(db_name)
+        self.table = self.con.execute(
+            f"create table company({', '.join(COLUMNS)})"
         )
-        self.meta.create_all(self.engine)
+
+    def get_table_columns(self):
+        cursor = self.con.execute('select * from company')
+        return [description[0] for description in cursor.description]
 
 
 class DBManagerTest(TestCase):
 
     def setUp(self):
-        self.db = DBManager()
+        self.db = Database(':memory:')
 
-    def test_db_can_create_table(self):
-        self.assertIsNone(self.db.table)
-        table_name = 'companies'
+    def test_table_has_correct_columns(self):
+        columns = self.db.get_table_columns()
 
-        self.db.create_table(table_name)
-
-        self.assertTrue(self.db.engine.has_table('companies'))
-
-    def test_table_has_right_amount_of_columns(self):
-        table_name = 'companies'
-
-        self.db.create_table(table_name)
-
-        self.assertEqual(13, len(self.db.table.columns.keys()))
-        self.assertIn('id', self.db.table.columns.keys())
-        self.assertIn('iin', self.db.table.columns.keys())
-
-    def tearDown(self):
-        self.db.meta.drop_all(self.db.engine)
+        self.assertEqual(13, len(columns))
