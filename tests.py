@@ -8,13 +8,11 @@ class RobotBrowsePagesTest(TestCase):
 
     def setUp(self):
         self.url = 'https://nursultan.kgd.gov.kz/'
-        self.robot = Robot()
+        self.robot = Robot(self.url)
 
     def test_can_open_start_page(self):
-        self.robot.open_page(self.url)
-
         self.assertEqual(self.robot.current_page.status, 200)
-        self.assertEqual(self.robot.current_page.url, self.url)
+        self.assertIn(self.url, self.robot.current_page.url)
 
     def test_can_get_page_content(self):
         page_title = "Мемлекеттік Кірістер Департаменті"
@@ -31,6 +29,16 @@ class RobotBrowsePagesTest(TestCase):
 
         self.assertIn('<a', str(found_link))
         self.assertEqual(link_text, found_link.string)
+
+    def test_can_move_to_next_page_from_link(self):
+        self.robot.open_page(self.url)
+        expected_url = 'https://nursultan.kgd.gov.kz/kk/depsection/yuridicheskim-licam'
+        link_text = "Заңды тұлғаларға"
+
+        self.robot.open_page_from_link(link_text)
+
+        self.assertEqual(self.robot.current_page.status, 200)
+        self.assertIn(expected_url, self.robot.current_page.url)
 
     def test_can_find_file_link(self):
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
