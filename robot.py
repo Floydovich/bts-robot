@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 
 from page import Page
 
@@ -16,8 +15,7 @@ class Robot:
         self.current_page = Page(response)
 
     def find_link(self, text):
-        soup = BeautifulSoup(self.current_page.content, 'html.parser')
-        return soup.find('a', string=text)
+        return self.current_page.html.find('a', string=text)
 
     def open_page_from_link(self, link_text):
         link = self.find_link(link_text)

@@ -19,7 +19,7 @@ class RobotBrowsePagesTest(TestCase):
 
         self.robot = Robot(self.base_url, wanted_language)
 
-        self.assertIn(wanted_language, self.robot.current_page.url)
+        self.assertEqual(wanted_language, self.robot.current_page.url[-2:])
 
     def test_can_find_link_on_page(self):
         link_text = "Юридическим лицам"
@@ -39,10 +39,11 @@ class RobotBrowsePagesTest(TestCase):
         self.assertIn(expected_url, self.robot.current_page.url)
 
     def test_can_find_file_link(self):
-        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
         file_name = 'kopiya_kopiya_4_rus_263_67_58.xlsx'
+        link_string = 'Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему'
+        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
 
-        file_link = self.robot.find_link('Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему')
+        file_link = self.robot.find_link(link_string)
 
         self.assertIn(file_name, file_link['href'])
 
