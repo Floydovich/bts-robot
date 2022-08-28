@@ -7,23 +7,22 @@ from robot import Robot
 class RobotBrowsePagesTest(TestCase):
 
     def setUp(self):
-        self.url = 'https://nursultan.kgd.gov.kz/'
-        self.robot = Robot(self.url)
+        self.base_url = 'https://nursultan.kgd.gov.kz/'
+        self.robot = Robot(self.base_url, 'ru')
 
-    def test_can_open_start_page(self):
+    def test_can_open_home_page(self):
         self.assertEqual(self.robot.current_page.status, 200)
-        self.assertIn(self.url, self.robot.current_page.url)
+        self.assertIn(self.base_url, self.robot.current_page.url)
 
-    def test_can_get_page_content(self):
-        page_title = "Мемлекеттік Кірістер Департаменті"
+    def test_page_language_is_russian(self):
+        wanted_language = 'ru'
 
-        self.robot.open_page(self.url)
+        self.robot = Robot(self.base_url, wanted_language)
 
-        self.assertIn(page_title, self.robot.current_page.content)
+        self.assertIn(wanted_language, self.robot.current_page.url)
 
     def test_can_find_link_on_page(self):
-        self.robot.open_page(self.url)
-        link_text = "Заңды тұлғаларға"
+        link_text = "Юридическим лицам"
 
         found_link = self.robot.find_link(link_text)
 
@@ -31,9 +30,8 @@ class RobotBrowsePagesTest(TestCase):
         self.assertEqual(link_text, found_link.string)
 
     def test_can_move_to_next_page_from_link(self):
-        self.robot.open_page(self.url)
-        expected_url = 'https://nursultan.kgd.gov.kz/kk/depsection/yuridicheskim-licam'
-        link_text = "Заңды тұлғаларға"
+        expected_url = 'https://nursultan.kgd.gov.kz/ru/depsection/yuridicheskim-licam'
+        link_text = "Юридическим лицам"
 
         self.robot.open_page_from_link(link_text)
 
