@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from db import EXAMPLE_COMPANY, Database
+from db import Database
+from tests.examples import EXAMPLE_COMPANY
 
 
 class DBManagerTest(TestCase):
