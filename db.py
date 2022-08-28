@@ -27,14 +27,17 @@ class Database:
         cursor = self.con.execute('select * from company')
         return [description[0] for description in cursor.description]
 
-    def add_rows(self, companies):
+    def add_rows(self, rows):
         self.con.executemany(
             f"""
             insert into company({', '.join(COLUMNS)})
             values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            companies
+            rows
         )
 
     def all(self):
         return self.table.execute('select * from company').fetchall()
+
+    def close(self):
+        self.con.close()
