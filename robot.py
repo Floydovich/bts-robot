@@ -15,5 +15,7 @@ class Robot:
         link = soup.find('a', string=text)
         return link
 
-    def get_file(self, file_link):
-        return requests.get(file_link['href'])
+    def save_file(self, link_text):
+        link = self.find_link(link_text)
+        response = requests.get(link['href'])
+        open('list.xlsx', "wb").write(response.content)

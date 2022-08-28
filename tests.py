@@ -1,3 +1,4 @@
+import os.path
 from unittest import TestCase
 
 from robot import Robot
@@ -31,12 +32,19 @@ class RobotBrowsePagesTest(TestCase):
         self.assertIn('<a', str(found_link))
         self.assertEqual(link_text, found_link.string)
 
-    def test_can_download_file_from_link(self):
+    def test_can_find_file_link(self):
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
+        file_name = 'kopiya_kopiya_4_rus_263_67_58.xlsx'
 
         file_link = self.robot.find_link('Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему')
 
-        self.assertTrue(
-            'http://astana.kgd.gov.kz/sites/default/files/u1323/kopiya_kopiya_4_rus_263_67_58.xlsx',
-            file_link.string
-        )
+        self.assertIn(file_name, file_link['href'])
+
+    def test_can_save_file_from_page(self):
+        file_name = 'list.xlsx'
+        link_string = 'Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему'
+        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
+
+        self.robot.save_file(link_string)
+
+        self.assertTrue(os.path.exists(file_name))
