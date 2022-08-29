@@ -21,8 +21,12 @@ class Robot:
 
     def open_page_from_link(self, link_text):
         link = self.find_link(link_text)
-        next_page_url = link['href'][3:]  # убираем /ru из ссылок
-        self.open_page(self.base_url + next_page_url)
+
+        if '.xlsx' in link['href']:
+            self.save_file(link.string)
+        else:
+            next_page_url = link['href'][3:]  # убираем /ru из ссылок
+            self.open_page(self.base_url + next_page_url)
 
     def save_file(self, link_text):
         link = self.find_link(link_text)

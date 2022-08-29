@@ -62,3 +62,12 @@ class RobotBrowsePagesTest(TestCase):
         self.assertEqual(6, len(navbar_links))
         self.assertIn('О департаменте', navbar_links)
         self.assertIn('Юридическим лицам', navbar_links)
+
+    def test_can_save_file_if_opens_file_link(self):
+        file_name = 'list.xlsx'
+        link_string = 'Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему'
+        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
+
+        self.robot.open_page_from_link(link_string)
+
+        self.assertTrue(os.path.exists(file_name))
