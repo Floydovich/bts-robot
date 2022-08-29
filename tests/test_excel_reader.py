@@ -8,17 +8,13 @@ from examples import EXAMPLE_COMPANY
 class Reader:
     def __init__(self, path):
         self.path = path
-
-    def sheet(self):
-        workbook = openpyxl.load_workbook(self.path)
-        return workbook.active
+        self.sheet = openpyxl.load_workbook(self.path).active
 
     def all(self):
-        sheet = self.sheet()
         rows = []
-        for row in sheet.iter_rows(min_row=6, min_col=1,
-                                   max_row=sheet.max_row,
-                                   max_col=sheet.max_column):
+        for row in self.sheet.iter_rows(min_row=6, min_col=1,
+                                        max_row=self.sheet.max_row,
+                                        max_col=self.sheet.max_column):
             rows.append(row)
         return rows
 
@@ -32,7 +28,7 @@ class ExcelReaderTest(TestCase):
     def test_can_read_first_row(self):
         expected_row = EXAMPLE_COMPANY
 
-        sheet = self.reader.sheet()
+        sheet = self.reader.sheet
 
         self.assertEqual(expected_row[0], list(sheet.rows)[5][1].value)
 
