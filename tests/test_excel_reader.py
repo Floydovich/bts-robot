@@ -10,13 +10,6 @@ class ExcelReaderTest(TestCase):
         path = "list.xlsx"
         self.reader = Reader(path)
 
-    def test_can_read_first_row(self):
-        expected_row = EXAMPLE_COMPANY
-
-        sheet = self.reader.sheet
-
-        self.assertEqual(expected_row[0], list(sheet.rows)[5][1].value)
-
     def test_can_get_all_rows(self):
         rows = self.reader.all()
 

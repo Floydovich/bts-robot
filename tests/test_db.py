@@ -12,7 +12,7 @@ class DBManagerTest(TestCase):
     def test_table_has_correct_columns(self):
         columns = self.db.column_names()
 
-        self.assertEqual(13, len(columns))
+        self.assertEqual(14, len(columns))
 
     def test_can_add_company(self):
         companies = [EXAMPLE_COMPANY]
