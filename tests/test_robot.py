@@ -55,3 +55,10 @@ class RobotBrowsePagesTest(TestCase):
         self.robot.save_file(link_string)
 
         self.assertTrue(os.path.exists(file_name))
+
+    def test_can_find_all_links_in_navbar(self):
+        navbar_links = self.robot.main_menu()
+
+        self.assertEqual(6, len(navbar_links))
+        self.assertIn('О департаменте', navbar_links)
+        self.assertIn('Юридическим лицам', navbar_links)
