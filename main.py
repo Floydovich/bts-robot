@@ -1,3 +1,5 @@
+import os.path
+
 from db import Database
 from excel_reader import Reader
 from robot import Robot
@@ -14,10 +16,16 @@ def main():
         "Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему"
     ]
 
-    for step in steps:
-        print(step)
-        robot.open_page_from_link(step)
-        print(robot.current_page.url)
+    while True:
+        text = input('Введите раздел который вы хотите найти')
+
+        link = robot.open_link(text)
+
+        if link is None:
+            continue
+
+        if os.path.exists('list.xlsx'):
+            break
 
     rows = Reader('list.xlsx').all()
 

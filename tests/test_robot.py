@@ -33,7 +33,7 @@ class RobotBrowsePagesTest(TestCase):
         expected_url = 'https://nursultan.kgd.gov.kz/ru/depsection/yuridicheskim-licam'
         link_text = "Юридическим лицам"
 
-        self.robot.open_page_from_link(link_text)
+        self.robot.open_link(link_text)
 
         self.assertEqual(self.robot.current_page.status, 200)
         self.assertIn(expected_url, self.robot.current_page.url)
@@ -61,6 +61,13 @@ class RobotBrowsePagesTest(TestCase):
         link_string = 'Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему'
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2')
 
-        self.robot.open_page_from_link(link_string)
+        self.robot.open_link(link_string)
 
         self.assertTrue(os.path.exists(file_name))
+
+    def test_invalid_link_text_returns_None(self):
+        link_text = "Юр лицам"
+
+        found_link = self.robot.find_link(link_text)
+
+        self.assertIsNone(found_link)
