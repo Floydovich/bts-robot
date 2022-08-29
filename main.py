@@ -1,3 +1,4 @@
+from excel_reader import Reader
 from robot import Robot
 
 
@@ -16,6 +17,9 @@ def main():
         print(step)
         robot.open_page_from_link(step)
         print(robot.current_page.url)
+
+    rows = Reader('list.xlsx').all()
+    print(rows)
 
 
 if __name__ == '__main__':

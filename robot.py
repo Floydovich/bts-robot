@@ -33,14 +33,3 @@ class Robot:
         response = requests.get(link['href'])
         with open('list.xlsx', "wb") as f:
             f.write(response.content)
-
-    def main_menu(self):
-        # TODO: Брать разделы из навбара
-        return [
-            "О департаменте",
-            "Участникам ВЭД",
-            "Физическим лицам",
-            "Юридическим лицам",
-            "Индивидуальным предпринимателям",
-            "Список НП подлежащих к принудительной ликвидации"
-        ]
