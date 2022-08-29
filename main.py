@@ -1,3 +1,4 @@
+from db import Database
 from excel_reader import Reader
 from robot import Robot
 
@@ -19,7 +20,11 @@ def main():
         print(robot.current_page.url)
 
     rows = Reader('list.xlsx').all()
-    print(rows)
+
+    db = Database('companies.db')
+    db.add_rows(rows)
+
+    print(db.all())
 
 
 if __name__ == '__main__':

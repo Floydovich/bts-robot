@@ -1,6 +1,7 @@
 import sqlite3
 
-COLUMNS = ['iin',
+COLUMNS = ['number',
+           'iin',
            'company_name',
            'registration_number',
            'company_address',
@@ -31,7 +32,7 @@ class Database:
         self.con.executemany(
             f"""
             insert into company({', '.join(COLUMNS)})
-            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             rows
         )
