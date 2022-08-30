@@ -66,7 +66,7 @@ class WebParserTest(TestCase):
 
         self.assertTrue(os.path.exists(file_name))
 
-    def test_parser_can_find_link_from_catmenu(self):
+    def test_parser_can_find_link_in_content(self):
         text = 'Информационное сообщение'
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/depsection/2018-god')
 
@@ -76,3 +76,20 @@ class WebParserTest(TestCase):
         self.assertEqual('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2',
                          self.robot.current_page.url)
 
+    def test_can_find_link_with_incorrect_ending(self):
+        text = 'Информационные сообщения'
+        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/depsection/2018-god')
+
+        self.robot.find_link_in_content(text)
+
+        self.assertEqual(200, self.robot.current_page.status)
+        self.assertEqual('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2',
+                         self.robot.current_page.url)
+
+    def test_can_find_only_file_links(self):
+        text = "Объявления о возбуждении дела о банкротстве и порядке заявления требовании кредиторами временному управляющему"
+        self.robot.open_page('https://almaty.kgd.gov.kz/ru/content/informacionnye-soobshcheniya-3-3')
+
+        link = self.robot.find_file_link(text)
+
+        self.assertEqual(text, link.string)

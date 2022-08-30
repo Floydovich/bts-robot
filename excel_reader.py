@@ -10,7 +10,7 @@ class Reader:
         rows = []
         for row in self.sheet.iter_rows(min_row=6, min_col=1,
                                         max_row=self.sheet.max_row,
-                                        max_col=self.sheet.max_column):
+                                        max_col=14):
             cells = [cell.value for cell in row]
             rows.append(cells)
         return rows

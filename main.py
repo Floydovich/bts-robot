@@ -1,3 +1,5 @@
+import os.path
+
 from db import Database
 from excel_reader import Reader
 from sites import SITES
@@ -7,9 +9,12 @@ from webparser import WebParser
 categories = [
     "Реабилитация и банкротство",
     "год",
-    "Информационное сообщение",
-    "Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему"
+    "Информационные сообщения",
 ]
+
+file_name = "Объявления о возбуждении дела о банкротстве и порядке заявления требовании кредиторами временному управляющему"
+
+years = ['2018', '2019', '2020', '2021']
 
 
 def main():
@@ -18,18 +23,23 @@ def main():
     for url in SITES:
         parser = WebParser(url, 'ru')
 
-        for year in ['2018', '2019', '2020', '2021']:
+        for year in years:
             parser.open_link("Юридическим лицам")
-            print(">> page=", parser.current_page.url)
             for category in categories:
+                print(">> page=", parser.current_page.url)
                 if "год" in category:
                     parser.find_link_in_content(f'{year} год')
                 parser.find_link_in_content(category)
-                print('<< page=', parser.current_page.url)
 
-            rows = Reader('list.xlsx').all_rows()
+            parser.find_file_link(file_name)
 
-            db.insert_rows(rows)
+            if os.path.exists('list.xlsx'):
+                print("file is there")
+                rows = Reader('list.xlsx').all_rows()
+                for i, r in enumerate(rows[0]):
+                    print(i, r)
+                db.insert_rows(rows)
+                os.remove('list.xlsx')
 
     db.close()
 
