@@ -6,7 +6,7 @@ class Reader:
         self.path = path
         self.sheet = openpyxl.load_workbook(self.path).active
 
-    def all(self):
+    def all_rows(self):
         rows = []
         for row in self.sheet.iter_rows(min_row=6, min_col=1,
                                         max_row=self.sheet.max_row,

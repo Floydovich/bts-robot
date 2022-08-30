@@ -23,14 +23,14 @@ class Database:
         self.create_table()
 
     def column_names(self):
-        cursor = self.con.execute('select * from company')
+        cursor = self.con.execute('SELECT * FROM company')
         return [description[0] for description in cursor.description]
 
     def add_rows(self, rows):
         self.con.executemany(
             f"""
-            insert into company({', '.join(COLUMNS)})
-            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO company({', '.join(COLUMNS)})
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             rows
         )
@@ -38,7 +38,7 @@ class Database:
 
     def all(self):
         cursor = self.con.cursor()
-        rows = cursor.execute('select * from company').fetchall()
+        rows = cursor.execute('SELECT * FROM company').fetchall()
         return rows
 
     def close(self):
@@ -46,10 +46,13 @@ class Database:
 
     def create_table(self):
         cursor = self.con.cursor()
-        cursor.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='company' ''')
-        if cursor.fetchone()[0] == 1:
-            pass
-        else:
+        cursor.execute(
+            '''
+            SELECT count(name) FROM sqlite_master 
+            WHERE type='table' AND name='company'
+            '''
+        )
+        if cursor.fetchone()[0] != 1:
             self.con.execute(
                 f"create table company({', '.join(COLUMNS)})"
             )

@@ -5,7 +5,7 @@ from difflib import SequenceMatcher
 from webparser import WebParser
 
 
-class RobotBrowsePagesTest(TestCase):
+class WebParserTest(TestCase):
 
     def setUp(self):
         self.base_url = 'https://nursultan.kgd.gov.kz/'

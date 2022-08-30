@@ -11,14 +11,14 @@ class ExcelReaderTest(TestCase):
         self.reader = Reader(path)
 
     def test_can_get_all_rows(self):
-        rows = self.reader.all()
+        rows = self.reader.all_rows()
 
         self.assertEqual(712, len(rows))
         self.assertEqual(14, len(rows[0]))
         self.assertEqual(14, len(rows[-1]))
 
     def test_row_has_text_values(self):
-        rows = self.reader.all()
+        rows = self.reader.all_rows()
 
         first_row = rows[0]
         last_row = rows[-1]
