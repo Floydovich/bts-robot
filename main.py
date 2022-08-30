@@ -32,7 +32,7 @@ def main():
     db = Database('companies.db')
     db.add_rows(rows)
 
-    print(db.all())
+    db.close()
 
 
 if __name__ == '__main__':

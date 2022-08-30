@@ -20,9 +20,7 @@ COLUMNS = ['number',
 class Database:
     def __init__(self, db_name):
         self.con = sqlite3.connect(db_name)
-        self.table = self.con.execute(
-            f"create table company({', '.join(COLUMNS)})"
-        )
+        self.create_table()
 
     def column_names(self):
         cursor = self.con.execute('select * from company')
@@ -36,9 +34,22 @@ class Database:
             """,
             rows
         )
+        self.con.commit()
 
     def all(self):
-        return self.table.execute('select * from company').fetchall()
+        cursor = self.con.cursor()
+        rows = cursor.execute('select * from company').fetchall()
+        return rows
 
     def close(self):
         self.con.close()
+
+    def create_table(self):
+        cursor = self.con.cursor()
+        cursor.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='company' ''')
+        if cursor.fetchone()[0] == 1:
+            pass
+        else:
+            self.con.execute(
+                f"create table company({', '.join(COLUMNS)})"
+            )
