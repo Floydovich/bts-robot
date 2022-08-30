@@ -20,6 +20,8 @@ class WebParser:
 
     def open_link(self, link_text):
         link = self.find_link(link_text)
+        print(self.current_page.url)
+        print(link)
 
         if link is None: return None
 
@@ -36,15 +38,6 @@ class WebParser:
         response = requests.get(link['href'])
         with open('list.xlsx', "wb") as f:
             f.write(response.content)
-
-    def find_similar_links(self, searched_text):
-        all_links = self.current_page.html.find_all(lambda a: a.has_attr('href'))
-        similar_links = []
-        for link in all_links:
-            ratio = SequenceMatcher(None, searched_text, link.text).ratio()
-            if ratio >= 0.5 and link not in similar_links:
-                similar_links.append(link)
-        return similar_links
 
 
 class Page:

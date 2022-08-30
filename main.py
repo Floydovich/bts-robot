@@ -1,34 +1,34 @@
 from db import Database
 from excel_reader import Reader
-from sites import select_site
+from sites import SITES
 from webparser import WebParser
 
 
+STEPS = [
+    "Юридическим лицам",
+    "Реабилитация и банкротство",
+    "год",
+    "Информационное сообщение",
+    "Объявления о возбуждении дела о банкротстве  и порядке заявления требований кредиторами временному управляющему"
+]
+
+
 def main():
-    url = select_site()
-    parser = WebParser(url, 'ru')
-
-    while True:
-        text = input('>> Введите раздел который вы хотите найти: ')
-
-        link = parser.open_link(text)
-
-        if link is None:
-            print(f">> {text} не найдено.")
-
-            similar_link = parser.find_similar_links(text)
-            if similar_link:
-                print(">> Может вы имели ввиду:")
-                for link in similar_link:
-                    print(link.text)
-            continue
-        if '.xlsx' in link['href']:
-            break
-
-    rows = Reader('list.xlsx').all_rows()
-
     db = Database('companies.db')
-    db.insert_rows(rows)
+
+    for url in SITES:
+        parser = WebParser(url, 'ru')
+
+        for year in ['2018', '2019', '2020', '2021']:
+            for step in STEPS:
+                if "год" in step:
+                    parser.open_link(f'{year} год')
+                parser.open_link(step)
+
+            rows = Reader('list.xlsx').all_rows()
+
+            db.insert_rows(rows)
+
     db.close()
 
 

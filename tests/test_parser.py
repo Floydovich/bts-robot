@@ -66,26 +66,13 @@ class WebParserTest(TestCase):
 
         self.assertTrue(os.path.exists(file_name))
 
-    def test_invalid_link_text_returns_None(self):
-        link_text = "Юр лицам"
+    def test_parser_can_find_not_exact_link(self):
+        text = 'Информационные сообщения'
+        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/depsection/2018-god')
 
-        found_link = self.robot.find_link(link_text)
+        self.robot.open_link(text)
 
-        self.assertIsNone(found_link)
+        self.assertEqual(200, self.robot.current_page.status)
+        self.assertEqual('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2',
+                         self.robot.current_page.url)
 
-    def test_find_similar_links(self):
-        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2-1')
-        searched_text = "Объявления о возбуждении банкротства"
-
-        results = self.robot.find_similar_links(searched_text)
-
-        ratio = SequenceMatcher(None, searched_text, results[0].text).ratio()
-        self.assertGreaterEqual(ratio, 0.1)
-
-    def test_similar_links_has_only_unique_texts(self):
-        searched_text = "Юр лицам"
-
-        results = self.robot.find_similar_links(searched_text)
-
-        unique_results = set([result.text for result in results])
-        self.assertEqual(len(unique_results), len(results))

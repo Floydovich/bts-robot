@@ -15,19 +15,3 @@ SITES = ['http://nursultan.kgd.gov.kz/',
          'http://pvl.kgd.gov.kz/',
          'http://sko.kgd.gov.kz/',
          'http://trk.kgd.gov.kz/']
-
-
-def select_site():
-    for i, site in enumerate(SITES):
-        print(i + 1, '-', site)
-
-    while True:
-        try:
-            site_index = int(input("Выберите номер сайта: "))
-            if site_index not in range(1, len(SITES) + 1):
-                print(f"Пожалуйста введите число от 1 до {len(SITES)}")
-                continue
-            return SITES[site_index - 1]
-        except ValueError:
-            print("Номер сайта должен быть цифрой")
-            continue
