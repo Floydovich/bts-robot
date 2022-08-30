@@ -1,14 +1,15 @@
 import os.path
 from unittest import TestCase
+from difflib import SequenceMatcher
 
-from robot import Robot
+from webparser import WebParser
 
 
 class RobotBrowsePagesTest(TestCase):
 
     def setUp(self):
         self.base_url = 'https://nursultan.kgd.gov.kz/'
-        self.robot = Robot(self.base_url, 'ru')
+        self.robot = WebParser(self.base_url, 'ru')
 
     def test_can_open_home_page(self):
         self.assertEqual(self.robot.current_page.status, 200)
@@ -17,7 +18,7 @@ class RobotBrowsePagesTest(TestCase):
     def test_page_language_is_russian(self):
         wanted_language = 'ru'
 
-        self.robot = Robot(self.base_url, wanted_language)
+        self.robot = WebParser(self.base_url, wanted_language)
 
         self.assertEqual(wanted_language, self.robot.current_page.url[-2:])
 
@@ -71,3 +72,12 @@ class RobotBrowsePagesTest(TestCase):
         found_link = self.robot.find_link(link_text)
 
         self.assertIsNone(found_link)
+
+    def test_find_similar_links(self):
+        self.robot.open_page('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2-1')
+        searched_text = "Объявления о возбуждении банкротства"
+
+        results = self.robot.find_similar_links(searched_text)
+
+        ratio = SequenceMatcher(None, searched_text, results[0].text).ratio()
+        self.assertGreaterEqual(ratio, 0.1)

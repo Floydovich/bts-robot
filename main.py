@@ -2,11 +2,11 @@ import os.path
 
 from db import Database
 from excel_reader import Reader
-from robot import Robot
+from webparser import WebParser
 
 
 def main():
-    robot = Robot('https://nursultan.kgd.gov.kz/', 'ru')
+    robot = WebParser('https://nursultan.kgd.gov.kz/', 'ru')
 
     steps = [
         "Юридическим лицам",
@@ -17,14 +17,13 @@ def main():
     ]
 
     while True:
-        text = input('Введите раздел который вы хотите найти')
+        text = input('Введите раздел который вы хотите найти: ')
 
         link = robot.open_link(text)
 
         if link is None:
             continue
-
-        if os.path.exists('list.xlsx'):
+        if '.xlsx' in link['href']:
             break
 
     rows = Reader('list.xlsx').all()
