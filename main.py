@@ -6,19 +6,21 @@ from webparser import WebParser
 
 def main():
     url = select_site()
-
     parser = WebParser(url, 'ru')
 
     while True:
-        text = input('Введите раздел который вы хотите найти: ')
+        text = input('>> Введите раздел который вы хотите найти: ')
 
         link = parser.open_link(text)
 
         if link is None:
+            print(f">> {text} не найдено.")
+
             similar_link = parser.find_similar_links(text)
-            print(f"{text} не найдено. Может вы имели ввиду: ")
-            for link in similar_link:
-                print(link.text)
+            if similar_link:
+                print(">> Может вы имели ввиду:")
+                for link in similar_link:
+                    print(link.text)
             continue
         if '.xlsx' in link['href']:
             break
