@@ -22,6 +22,10 @@ def main():
         link = robot.open_link(text)
 
         if link is None:
+            similar_link = robot.find_similar_links(text)
+            print(f"{text} не найдено. Может вы имели ввиду: ")
+            for link in similar_link:
+                print(link.text)
             continue
         if '.xlsx' in link['href']:
             break

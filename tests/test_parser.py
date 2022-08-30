@@ -81,3 +81,11 @@ class RobotBrowsePagesTest(TestCase):
 
         ratio = SequenceMatcher(None, searched_text, results[0].text).ratio()
         self.assertGreaterEqual(ratio, 0.1)
+
+    def test_similar_links_has_only_unique_texts(self):
+        searched_text = "Юр лицам"
+
+        results = self.robot.find_similar_links(searched_text)
+
+        unique_results = set([result.text for result in results])
+        self.assertEqual(len(unique_results), len(results))
