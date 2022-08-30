@@ -66,11 +66,12 @@ class WebParserTest(TestCase):
 
         self.assertTrue(os.path.exists(file_name))
 
-    def test_parser_can_find_not_exact_link(self):
-        text = 'Информационные сообщения'
+    def test_parser_can_find_link_from_catmenu(self):
+        text = 'Информационное сообщение'
+        div = 'catmenu'
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/depsection/2018-god')
 
-        self.robot.open_link(text)
+        self.robot.open_link_in_div(text, div)
 
         self.assertEqual(200, self.robot.current_page.status)
         self.assertEqual('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2',
