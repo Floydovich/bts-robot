@@ -1,5 +1,5 @@
 SITES = [
-    # 'http://nursultan.kgd.gov.kz/',
+    'http://nursultan.kgd.gov.kz/',
     'http://almaty.kgd.gov.kz/',
     'http://shymkent.kgd.gov.kz/',
     'http://akm.kgd.gov.kz/',

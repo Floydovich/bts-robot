@@ -25,7 +25,7 @@ class WebParser:
         return self.current_page.html.find('a', string=text)
 
     def find_link_in_content(self, text):
-        content = self.current_page.html.select('div.catmenu')
+        content = self.current_page.html.select('div#block-system-main > div.content')
         for element in content:
             link = element.find('a', string=text)
             if link:
@@ -42,13 +42,9 @@ class WebParser:
             f.write(response.content)
 
     def find_file_link(self, text):
-        print(">> current page", self.current_page.url)
         file_links = self.current_page.html.find_all(is_xlsx_link)
-        print(file_links)
         for link in file_links:
-            print(link)
             if link.string == text:
-                print(">>>> link found")
                 response = requests.get(link['href'])
                 with open('list.xlsx', "wb") as f:
                     f.write(response.content)
