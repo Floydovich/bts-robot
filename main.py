@@ -4,8 +4,7 @@ from sites import SITES
 from webparser import WebParser
 
 
-STEPS = [
-    "Юридическим лицам",
+categories = [
     "Реабилитация и банкротство",
     "год",
     "Информационное сообщение",
@@ -20,10 +19,13 @@ def main():
         parser = WebParser(url, 'ru')
 
         for year in ['2018', '2019', '2020', '2021']:
-            for step in STEPS:
-                if "год" in step:
-                    parser.open_link(f'{year} год')
-                parser.open_link(step)
+            parser.open_link("Юридическим лицам")
+            print(">> page=", parser.current_page.url)
+            for category in categories:
+                if "год" in category:
+                    parser.find_link_in_content(f'{year} год')
+                parser.find_link_in_content(category)
+                print('<< page=', parser.current_page.url)
 
             rows = Reader('list.xlsx').all_rows()
 

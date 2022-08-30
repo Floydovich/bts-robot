@@ -68,10 +68,9 @@ class WebParserTest(TestCase):
 
     def test_parser_can_find_link_from_catmenu(self):
         text = 'Информационное сообщение'
-        div = 'catmenu'
         self.robot.open_page('https://nursultan.kgd.gov.kz/ru/depsection/2018-god')
 
-        self.robot.open_link_in_div(text, div)
+        self.robot.find_link_in_content(text)
 
         self.assertEqual(200, self.robot.current_page.status)
         self.assertEqual('https://nursultan.kgd.gov.kz/ru/content/informacionnoe-soobshchenie-2',

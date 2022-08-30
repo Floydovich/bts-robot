@@ -15,37 +15,36 @@ class WebParser:
         response = requests.get(url)
         self.current_page = Page(response)
 
+    def open_link(self, link_text):
+        link = self.find_link(link_text)
+        if link is None:
+            return None
+        else:
+            self.open_link_href(link)
+        return link
+
     def find_link(self, text):
         return self.current_page.html.find('a', string=text)
 
-    def open_link(self, link_text):
-        link = self.find_link(link_text)
+    def find_link_in_content(self, text):
+        content = self.current_page.html.select(f'div.content')
+        for element in content:
+            link = element.find('a', string=text)
+            if link:
+                self.open_link_href(link)
 
-        if link is None: return None
-
+    def open_link_href(self, link):
         if '.xlsx' in link['href']:
             self.save_file(link.string)
         else:
-            self.open_link_href(link)
-
-        return link
+            next_page_url = link['href'][3:]  # убираем /ru из ссылок
+            self.open_page(self.base_url + next_page_url)
 
     def save_file(self, link_text):
         link = self.find_link(link_text)
         response = requests.get(link['href'])
         with open('list.xlsx', "wb") as f:
             f.write(response.content)
-
-    def open_link_in_div(self, text, div):
-        catmenu = self.current_page.html.select(f'div.{div}')
-        for cat in catmenu:
-            link = cat.find('a', string=text)
-            if link:
-                self.open_link_href(link)
-
-    def open_link_href(self, link):
-        next_page_url = link['href'][3:]  # убираем /ru из ссылок
-        self.open_page(self.base_url + next_page_url)
 
 
 class Page:
