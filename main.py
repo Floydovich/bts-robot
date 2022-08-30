@@ -1,10 +1,13 @@
 from db import Database
 from excel_reader import Reader
+from sites import select_site
 from webparser import WebParser
 
 
 def main():
-    parser = WebParser('https://nursultan.kgd.gov.kz/', 'ru')
+    url = select_site()
+
+    parser = WebParser(url, 'ru')
 
     while True:
         text = input('Введите раздел который вы хотите найти: ')

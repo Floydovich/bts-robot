@@ -42,7 +42,7 @@ class WebParser:
         similar_links = []
         for link in all_links:
             ratio = SequenceMatcher(None, searched_text, link.text).ratio()
-            if ratio >= 0.4 and link not in similar_links:
+            if ratio >= 0.5 and link not in similar_links:
                 similar_links.append(link)
         return similar_links
 
