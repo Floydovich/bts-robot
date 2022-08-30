@@ -26,8 +26,7 @@ def main():
     rows = Reader('list.xlsx').all_rows()
 
     db = Database('companies.db')
-    db.add_rows(rows)
-
+    db.insert_rows(rows)
     db.close()
 
 

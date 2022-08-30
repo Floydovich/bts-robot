@@ -17,7 +17,7 @@ class DBManagerTest(TestCase):
     def test_can_add_company(self):
         companies = [EXAMPLE_COMPANY]
 
-        self.db.add_rows(companies)
+        self.db.insert_rows(companies)
 
         all_rows = self.db.all()
         self.assertEqual(1, len(all_rows))
@@ -26,7 +26,7 @@ class DBManagerTest(TestCase):
     def test_can_add_many_companies(self):
         companies = [EXAMPLE_COMPANY for _ in range(10)]
 
-        self.db.add_rows(companies)
+        self.db.insert_rows(companies)
 
         all_rows = self.db.all()
         self.assertEqual(len(companies), len(all_rows))

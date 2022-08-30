@@ -26,7 +26,7 @@ class Database:
         cursor = self.con.execute('SELECT * FROM company')
         return [description[0] for description in cursor.description]
 
-    def add_rows(self, rows):
+    def insert_rows(self, rows):
         self.con.executemany(
             f"""
             INSERT INTO company({', '.join(COLUMNS)})
